@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id        String   @id @default(cuid()) @map("_id")
+  code      String
+  title     String
+  author    String
+  stock     Int
+  status    String
+  createdAt DateTime @default(now())
+  Borrow    Borrow[]
+
+  @@unique([code])
+  @@map("books")
+}
+
+model Member {
+  id        String   @id @default(cuid()) @map("_id")
+  code      String
+  name      String
+  status    String
+  limit     Int      @default(2)
+  createdAt DateTime @default(now())
+  Borrow    Borrow[]
+
+  @@unique([code])
+  @@map("members")
+}
+
+model Borrow {
+  id         String   @id @default(cuid()) @map("_id")
+  memberCode String
+  bookCode   String
+  borrowTime DateTime
+  returnTime DateTime
+  createdAt  DateTime @default(now())
+  book       Book?    @relation(fields: [bookCode], references: [code])
+  member     Member?  @relation(fields: [memberCode], references: [code])
+
+  @@map("borrows")
+}
+
+model Penalty {
+  id         String   @id @default(cuid()) @map("_id")
+  memberCode String
+  createdAt  DateTime @default(now())
+
+  @@map("penalties")
+}
