@@ -77,36 +77,6 @@ export class BorrowService {
         },
       });
 
-      // const penaltyDay = new Date();
-      // console.log('penaltyDay', penaltyDay);
-      // console.log('create.returnTime', create.returnTime);
-
-      // if (penaltyDay > create.returnTime) {
-      //   const borrowData = await this.prisma.borrow.findFirst({
-      //     where: {
-      //       memberCode: create.memberCode,
-      //       borrowTime: create.borrowTime,
-      //     },
-      //   });
-      //   if (borrowData) {
-      //     const createPenalty = await this.prisma.penalty.create({
-      //       data: {
-      //         memberCode: dto.memberCode,
-      //       },
-      //     });
-      //     console.log('penaltyDay', penaltyDay);
-
-      //     const updateMemberStatus = await this.prisma.member.update({
-      //       where: {
-      //         code: createPenalty.memberCode,
-      //       },
-      //       data: {
-      //         status: 'penalty',
-      //       },
-      //     });
-      //   }
-      // }
-
       const borrow = {
         memberCode: create.memberCode,
         bookCode: create.bookCode,
