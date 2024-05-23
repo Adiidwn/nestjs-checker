@@ -1,0 +1,11 @@
+{
+  "name": "algoritma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.no1.js",
+  "scripts": {
+    "test": "node test.no1.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
