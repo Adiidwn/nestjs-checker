@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { BookDto, borrowBookDTO } from 'src/dtos/book.dto';
 import { BorrowDto } from 'src/dtos/borrow.dto';
 import { PrismaService } from 'src/prisma.service';
-import { map } from 'rxjs';
-
 @Injectable()
 export class BorrowService {
   constructor(private readonly prisma: PrismaService) {}
@@ -54,8 +51,8 @@ export class BorrowService {
         data: {
           memberCode: dto.memberCode,
           bookCode: dto.bookCode,
-          borrowTime: new Date(),
-          returnTime: returnDate,
+          borrowTime: new Date().toISOString(),
+          returnTime: returnDate.toISOString(),
         },
       });
 

@@ -1,7 +1,10 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
-import { BorrowDto } from 'src/dtos/borrow.dto';
-import { BorrowService } from './borrow.service';
+import { Body, Controller, Post } from '@nestjs/common';
 
+import { BorrowService } from './borrow.service';
+import { BorrowDto } from 'src/dtos/borrow.dto';
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('Borrow')
 @Controller('borrow')
 export class BorrowController {
   constructor(private readonly borrowService: BorrowService) {}
