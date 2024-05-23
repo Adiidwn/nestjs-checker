@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BookDto, borrowBookDTO } from 'src/dtos/book.dto';
 import { BorrowDto } from 'src/dtos/borrow.dto';
 import { PrismaService } from 'src/prisma.service';
+import { map } from 'rxjs';
 
 @Injectable()
 export class BorrowService {
@@ -9,8 +10,6 @@ export class BorrowService {
 
   async create(dto: BorrowDto) {
     try {
-      console.log('dto', dto);
-
       const findStatusMember = await this.prisma.member.findFirst({
         where: {
           code: dto.memberCode,
@@ -50,6 +49,7 @@ export class BorrowService {
 
       const returnDate = new Date();
       returnDate.setSeconds(returnDate.getSeconds() + 60);
+      // returnDate.setDate(returnDate.getDate() + 7);
       const create = await this.prisma.borrow.create({
         data: {
           memberCode: dto.memberCode,
@@ -105,13 +105,13 @@ export class BorrowService {
         },
       });
 
-      let data = '';
+      let result = '';
       if (overDate.length > 0) {
         console.log('7 days later found');
 
         const memberCodes = overDate.map((x) => x.memberCode);
 
-        const data = await this.prisma.member.updateMany({
+        const datas = await this.prisma.member.updateMany({
           where: {
             code: {
               in: memberCodes,
@@ -121,8 +121,12 @@ export class BorrowService {
             status: 'penaltized',
           },
         });
+        result = `penaltized found ${datas.count} members`;
       }
-      return overDate;
+      return {
+        result,
+        overDate,
+      };
     } catch (error) {
       throw error;
     }
@@ -195,6 +199,7 @@ export class BorrowService {
     try {
       const penaltyTime = new Date();
       penaltyTime.setSeconds(penaltyTime.getSeconds() - 60);
+      // penaltyTime.setDate(penaltyTime.getDate() - 3);
       const penalty = await this.prisma.penalty.findMany({
         where: {
           createdAt: {
@@ -202,6 +207,8 @@ export class BorrowService {
           },
         },
       });
+
+      let result = '';
       if (penalty.length > 0) {
         console.log('3 days later found');
 
@@ -224,8 +231,12 @@ export class BorrowService {
             status: 'active',
           },
         });
+        result = `status change to active found with memberCode:  ${memberCodes} `;
       }
-      return penalty;
+      return {
+        penalty,
+        result,
+      };
     } catch (error) {
       console.error('Error checking penalties:', error);
       throw error;

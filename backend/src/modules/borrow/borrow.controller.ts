@@ -24,10 +24,19 @@ export class BorrowController {
   async check() {
     try {
       const check7Days = await this.borrowService.check();
+
+      let status = 'pending';
+      if (check7Days.overDate.length > 0) {
+        status = 'success';
+      }
+      let message = '';
+      if (check7Days.overDate.length > 0) {
+        message = 'check 7 days successfully ';
+      }
       return {
-        status: 'success',
+        status,
         data: check7Days,
-        message: 'check 7 days successfully ',
+        message,
       };
     } catch (error) {
       throw error;
@@ -53,10 +62,18 @@ export class BorrowController {
   async penaltyRevivedCheck() {
     try {
       const penaltyRevivedCheck = await this.borrowService.penaltyCheck();
+      let status = 'pending';
+      if (penaltyRevivedCheck.penalty.length > 0) {
+        status = 'success';
+      }
+      let message = '';
+      if (penaltyRevivedCheck.penalty.length > 0) {
+        message = 'check 7 days successfully ';
+      }
       return {
-        status: 'success',
+        status,
         data: penaltyRevivedCheck,
-        message: 'penalty revived successfully ',
+        message,
       };
     } catch (error) {
       throw error;
