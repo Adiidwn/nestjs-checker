@@ -6,18 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServiceModules = void 0;
+exports.BorrowModule = void 0;
 const common_1 = require("@nestjs/common");
-const member_module_1 = require("./Member/member.module");
 const axios_1 = require("@nestjs/axios");
-const book_module_1 = require("./Book/book.module");
-const borrow_module_1 = require("./Borrow/borrow.module");
-let ServiceModules = class ServiceModules {
+const borrow_controller_1 = require("./borrow.controller");
+const borrow_service_1 = require("./borrow.service");
+let BorrowModule = class BorrowModule {
 };
-exports.ServiceModules = ServiceModules;
-exports.ServiceModules = ServiceModules = __decorate([
+exports.BorrowModule = BorrowModule;
+exports.BorrowModule = BorrowModule = __decorate([
     (0, common_1.Module)({
-        imports: [member_module_1.MemberModule, book_module_1.BookModule, borrow_module_1.BorrowModule, axios_1.HttpModule],
+        imports: [axios_1.HttpModule],
+        controllers: [borrow_controller_1.BorrowController],
+        providers: [borrow_service_1.BorrowService],
+        exports: [borrow_service_1.BorrowService],
     })
-], ServiceModules);
-//# sourceMappingURL=service.modules.js.map
+], BorrowModule);
+//# sourceMappingURL=borrow.module.js.map

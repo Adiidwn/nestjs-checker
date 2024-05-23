@@ -6,18 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServiceModules = void 0;
+exports.BookModule = void 0;
 const common_1 = require("@nestjs/common");
-const member_module_1 = require("./Member/member.module");
 const axios_1 = require("@nestjs/axios");
-const book_module_1 = require("./Book/book.module");
-const borrow_module_1 = require("./Borrow/borrow.module");
-let ServiceModules = class ServiceModules {
+const book_controller_1 = require("./book.controller");
+const book_service_1 = require("./book.service");
+let BookModule = class BookModule {
 };
-exports.ServiceModules = ServiceModules;
-exports.ServiceModules = ServiceModules = __decorate([
+exports.BookModule = BookModule;
+exports.BookModule = BookModule = __decorate([
     (0, common_1.Module)({
-        imports: [member_module_1.MemberModule, book_module_1.BookModule, borrow_module_1.BorrowModule, axios_1.HttpModule],
+        imports: [axios_1.HttpModule],
+        controllers: [book_controller_1.BookController],
+        providers: [book_service_1.BookService],
+        exports: [book_service_1.BookService],
     })
-], ServiceModules);
-//# sourceMappingURL=service.modules.js.map
+], BookModule);
+//# sourceMappingURL=book.module.js.map

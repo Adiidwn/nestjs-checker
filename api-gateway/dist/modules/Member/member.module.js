@@ -6,18 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServiceModules = void 0;
+exports.MemberModule = void 0;
 const common_1 = require("@nestjs/common");
-const member_module_1 = require("./Member/member.module");
 const axios_1 = require("@nestjs/axios");
-const book_module_1 = require("./Book/book.module");
-const borrow_module_1 = require("./Borrow/borrow.module");
-let ServiceModules = class ServiceModules {
+const member_controller_1 = require("./member.controller");
+const member_service_1 = require("./member.service");
+let MemberModule = class MemberModule {
 };
-exports.ServiceModules = ServiceModules;
-exports.ServiceModules = ServiceModules = __decorate([
+exports.MemberModule = MemberModule;
+exports.MemberModule = MemberModule = __decorate([
     (0, common_1.Module)({
-        imports: [member_module_1.MemberModule, book_module_1.BookModule, borrow_module_1.BorrowModule, axios_1.HttpModule],
+        imports: [axios_1.HttpModule],
+        controllers: [member_controller_1.MemberController],
+        providers: [member_service_1.MemberService],
+        exports: [member_service_1.MemberService],
     })
-], ServiceModules);
-//# sourceMappingURL=service.modules.js.map
+], MemberModule);
+//# sourceMappingURL=member.module.js.map

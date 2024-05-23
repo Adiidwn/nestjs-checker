@@ -14,10 +14,10 @@ Installation [Explain how to install the project. Include any dependencies and s
 -find all members with books (if borrow)
 
 @Borrow
--can borrow if members not in status penaltized,limit not < 0, and the books status available(no members borrow at the moment) need [memberCode,bookCode] it will auto change book status to borrowed and decrease limit member by 1
--check7Days it will check are the members already return the books or not( if more than 7 days when click member status will change to penaltized)[],btw im setting to 60 seconds so u can check with method post
--returnBook, when return book need [memberCode,bookCode]its gonna check if member borrow the book or not, if yes the book returned, and[IF-member-with-status-penaltized-will-create-penalty-with-member-code-banned-for-3Days] it will auto change book status to available and increase limit member by 1
--check3Days, whenever the member with code in penalty it will banned 3 days and auto remove and change member status to active ,btw im setting it to 60 seconds so u can test it with method post
+-can borrow if members not in status penaltized,limit not < 0(i set it to 2 default), and the books status available(no members borrow at the moment) need [memberCode,bookCode] it will auto update book status to 'borrowed' and decrease limit member by 1
+-check7Days it will check are the members already return the books or not( if more than 7 days member dnt give it back the status will change to penaltized)[],btw im setting to 60 seconds so u can check with method post #Note if success will show log 7 days found!
+-returnBook, when return book need [memberCode,bookCode]its gonna check if member borrow the book or not, if yes the book returned, and[IF-member-with-status-penaltized-it-will-create-penalty-with-member-code-banned-for-3Days] it will auto change book status to available and increase limit member by 1 and delete borrow id with memberCode and bookCode
+-check3Days, whenever the member with code in penalty it will banned 3 days and auto remove and change member status to active ,btw im setting it to 60 seconds so u can test it with method post #Note if success log 3 days found
 
 and im add api-gateway also with docker
 thanks

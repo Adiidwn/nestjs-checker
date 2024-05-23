@@ -105,13 +105,13 @@ export class BorrowService {
         },
       });
 
+      let data = '';
       if (overDate.length > 0) {
         console.log('7 days later found');
 
         const memberCodes = overDate.map((x) => x.memberCode);
 
-        // Update member status to 'penaltized' in batch
-        await this.prisma.member.updateMany({
+        const data = await this.prisma.member.updateMany({
           where: {
             code: {
               in: memberCodes,
@@ -128,6 +128,69 @@ export class BorrowService {
     }
   }
 
+  async returnBook(dto: BorrowDto) {
+    try {
+      const returnBook = await this.prisma.borrow.findFirst({
+        where: {
+          memberCode: dto.memberCode,
+          bookCode: dto.bookCode,
+        },
+      });
+
+      if (!returnBook) {
+        throw new Error('Error: You have not borrowed this book');
+      }
+
+      const checkPenalty = await this.prisma.member.findFirst({
+        where: {
+          code: returnBook.memberCode,
+        },
+        select: {
+          status: true,
+        },
+      });
+
+      if (checkPenalty.status === 'penaltized') {
+        await this.prisma.penalty.create({
+          data: {
+            memberCode: returnBook.memberCode,
+          },
+        });
+        console.log('penaltized found');
+      }
+
+      const updateStatusBook = await this.prisma.book.update({
+        where: {
+          code: returnBook.bookCode,
+        },
+        data: {
+          status: 'available',
+        },
+      });
+      const updateMemberLimit = await this.prisma.member.update({
+        where: {
+          code: returnBook.memberCode,
+        },
+        data: {
+          limit: { increment: 1 },
+        },
+      });
+
+      const returnBookData = await this.prisma.borrow.delete({
+        where: {
+          id: returnBook.id,
+        },
+      });
+
+      return {
+        updateStatusBook,
+        updateMemberLimit,
+        returnBookData,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
   async penaltyCheck() {
     try {
       const penaltyTime = new Date();
@@ -165,69 +228,6 @@ export class BorrowService {
       return penalty;
     } catch (error) {
       console.error('Error checking penalties:', error);
-      throw error;
-    }
-  }
-
-  async returnBook(dto: BorrowDto) {
-    try {
-      const returnBook = await this.prisma.borrow.findFirst({
-        where: {
-          memberCode: dto.memberCode,
-          bookCode: dto.bookCode,
-        },
-      });
-
-      if (!returnBook) {
-        throw new Error('Error: You have not borrowed this book');
-      }
-
-      const checkPenalty = await this.prisma.member.findFirst({
-        where: {
-          code: returnBook.memberCode,
-        },
-        select: {
-          status: true,
-        },
-      });
-
-      if (checkPenalty.status === 'penaltized') {
-        await this.prisma.penalty.create({
-          data: {
-            memberCode: returnBook.memberCode,
-          },
-        });
-      }
-
-      const updateStatusBook = await this.prisma.book.update({
-        where: {
-          code: returnBook.bookCode,
-        },
-        data: {
-          status: 'available',
-        },
-      });
-      const updateMemberLimit = await this.prisma.member.update({
-        where: {
-          code: returnBook.memberCode,
-        },
-        data: {
-          limit: { increment: 1 },
-        },
-      });
-
-      const returnBookData = await this.prisma.borrow.delete({
-        where: {
-          id: returnBook.id,
-        },
-      });
-
-      return {
-        updateStatusBook,
-        updateMemberLimit,
-        returnBookData,
-      };
-    } catch (error) {
       throw error;
     }
   }
